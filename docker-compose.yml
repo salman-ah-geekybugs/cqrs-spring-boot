@@ -1,0 +1,29 @@
+version: '2'
+services:
+  api-server:
+    container_name: api-server
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: api-server:latest
+    environment:
+      - axon.axonserver.servers=axonserver:8124
+    ports:
+      - 5000:5000
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - axon-server
+  axon-server:
+    container_name: axonserver
+    hostname: axonserver
+    image: axoniq/axonserver:4.6.7-dev
+    ports:
+      - 8024:8024
+      - 8124:8124
+      - 8224:8224
+    networks:
+      - spring-cloud-network
+networks:
+  spring-cloud-network:
+    driver: bridge
